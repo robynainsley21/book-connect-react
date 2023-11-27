@@ -1,6 +1,8 @@
+import HomePage from "../pages/Home";
+
 const MainLayout = () => {
   return (
-
+    <>
       <nav className="nav">
         <div className="nav-logo">
           <a className="logo" href="/">
@@ -9,13 +11,18 @@ const MainLayout = () => {
           <p className="logo-name">Book Connect</p>
         </div>
         <div>
-        <div className="settings">
-            <button className="settings-item"><i className="fa-solid fa-magnifying-glass fa-2x"></i></button>
-            <button className="settings-item"><i className="fa-solid fa-user fa-2x"></i></button>
+          <div className="settings">
+            <button className="settings-item">
+              <i className="fa-solid fa-magnifying-glass fa-2x"></i>
+            </button>
+            <button className="settings-item">
+              <i className="fa-solid fa-user fa-2x"></i>
+            </button>
+          </div>
         </div>
-        </div>
-
       </nav>
+      <HomePage />
+    </>
   );
 };
 
