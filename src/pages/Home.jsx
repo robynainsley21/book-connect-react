@@ -1,5 +1,5 @@
 import { BOOKS_PER_PAGE, authors, genres, books } from "../data/data.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 // MUI COMPONENTS
@@ -7,82 +7,91 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const Preview = (props) => {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "#F4F1DE",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
+const Preview = (props) => {
+  const { handleClose, chosenBook } = props;
+  // console.log(chosenBook)
   return (
     <>
-      <div>
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              timeout: 500,
-            },
-          }}
-        >
-          <Fade in={open}>
-            <Box sx={style}>
-              <Typography
-                id="transition-modal-title"
-                variant="h6"
-                component="h2"
-              >
-                Text in a modal
-              </Typography>
-              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
-              <button onClick={props.handleClose}>close</button>
-            </Box>
-          </Fade>
-        </Modal>
+      {/* <Modal>
+    <div className="preview-overlay" key={chosenBook.id}>
+        <div>
+          <p>{chosenBook.title}</p>
+          <p>{chosenBook.popularity}</p>
+        </div>
+        <button onClick={handleClose}>Close</button>
       </div>
+    </Modal> */}
+      <Modal
+        open={true}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+        </Box>
+        <button onClick={handleClose}>Close</button>
+      </Modal>
     </>
   );
 };
 
 const HomePage = () => {
-  books.map((book) => console.log(book));
+  // books.map((book) => console.log(book));
+  const [selectedBook, setSelectedBook] = useState(null);
   const [openBook, setOpenBook] = useState(false);
 
-  const openPreview = () => {
-    setOpenBook(true);
+  const closePreview = () => {
+    setOpenBook(false);
+    setSelectedBook(null);
   };
-  const closePreview = () => setOpenBook(false);
 
-  const eachBook = books.map((book) => {
+  const extractedBooks = books.slice(0, 20);
+  const eachBook = extractedBooks.map((book, index) => {
+    if (!book) return null;
     const { id, author, title, image } = book;
 
-    return (
-      <button className="book-button" key={id} onClick={openPreview}>
-        <div className="book-image">
-          <img style={{ width: "5rem" }} src={image} alt="book-image" />
-        </div>
+    const openPreview = () => {
+      setSelectedBook(book);
+      setOpenBook(true);
+    };
 
-        <div className="author-and-title">
-          <p style={{ fontWeight: "bold", fontSize: "1.1rem" }}>{title}</p>
-          <p>{authors[author]}</p>
-        </div>
-      </button>
+    return (
+      <>
+        <button className="book-button" key={id} onClick={openPreview}>
+          <div className="book-image">
+            <img style={{ width: "5rem" }} src={image} alt="book-image" />
+          </div>
+
+          <div className="author-and-title">
+            <p style={{ fontWeight: "bold", fontSize: "1.1rem" }}>{title}</p>
+            <p>{authors[author]}</p>
+          </div>
+        </button>
+
+        {selectedBook && openBook && (
+          <Preview handleClose={closePreview} chosenBook={book} />
+        )}
+      </>
     );
   });
 
@@ -99,10 +108,6 @@ const HomePage = () => {
           </Backdrop>
         )}
       </div>
-      {ReactDOM.createPortal(
-        openBook && <Preview handleClose={closePreview} />,
-        document.body
-      )}
     </>
   );
 };
