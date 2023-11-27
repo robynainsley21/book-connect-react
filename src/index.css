@@ -1,10 +1,19 @@
+:root{
+  --color-dark-main: #1E1E24;
+  --color-dark-compliment: #444140;
+  --color-light-main: #81B29A;
+  --color-light-compliment: #F4F1DE;
+}
+
 *{
   font-family: "Roboto", sans-serif;
   margin: 0;
 }
 
 body{
-  background-color: #5F7470;
+  background-color: var(--color-light-compliment);
+  min-height: 100vh;
+  min-width: 100%;
 }
 
 /* NAVBAR */
@@ -12,7 +21,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #D2D4C8;
+  background-color: var(--color-light-main);
   padding: 1rem;
 }
 
@@ -22,7 +31,7 @@ body{
 }
 
 .logo{
-  color: #5F7470;
+  color: var(--color-light-compliment);
   cursor: pointer;
   margin: 8px;
 }
@@ -34,8 +43,8 @@ body{
 
 .settings-item{
   margin: 5px;
-  color: #5F7470;
-  background-color: #D2D4C8;
+  color: var(--color-light-compliment);
+  background-color: var(--color-light-main);
   border: 1px solid;
   border-radius: 5px;
   padding: 6px;
@@ -44,5 +53,38 @@ body{
 .logo-name{
   font-size: 1.7rem;
   font-weight: bold;
-  color: #5F7470;
+  color: var(--color-light-compliment);
+}
+
+/* HOME PAGE */
+/* books */
+.books-container{
+  display: grid;
+}
+
+.book-button{
+  background-color: var(--color-light-main);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+}
+
+.author-and-title{
+  text-align: left;
+  line-height: 1.5rem;
+  font-size: 1rem;
+}
+
+.book-image{
+  margin-right: 1rem;
+}
+
+/* preview */
+
+@media screen and (min-width: 50rem) {
+  .books-container{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin: 1rem;
+  }
 }
