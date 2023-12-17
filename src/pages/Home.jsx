@@ -63,8 +63,15 @@ const Preview = (props) => {
                   <p>{description}</p>
                 </DialogContentText>
               </DialogContent>
-              <DialogActions style={{display: 'flex', justifyContent: 'center'}}>
-                <Button onClick={handleCloseDescription}>Close</Button>
+              <DialogActions
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <Button
+                  style={{ backgroundColor: "#81B29A", color: "inherit" }}
+                  onClick={handleCloseDescription}
+                >
+                  Close
+                </Button>
               </DialogActions>
             </Dialog>
           </React.Fragment>
@@ -83,18 +90,23 @@ const Preview = (props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "1rem",
+          }}
+        >
+          <button className="styled-button" onClick={handleClose}>
+            Close
+          </button>
+        </div>
+        <Box style={{ overflow: "auto", maxHeight: "80vh" }}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "1rem",
-              }}
-            >
-              <button onClick={handleClose}>Close</button>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+            <p style={{ textAlign: "center", width: '80%' }}>{title ? title : Title} </p>
+
             </div>
-            <p style={{ textAlign: "center" }}>{title ? title : Title} </p>
             <div
               style={{
                 display: "flex",
@@ -114,14 +126,19 @@ const Preview = (props) => {
                 sx={{ mt: 2 }}
               >
                 <p>
-                  Description:{" "}
+                  <b>Description:</b>{" "}
                   {description
                     ? truncateText(description, maxDescriptionLength)
                     : "No description available"}{" "}
-                  <button onClick={handleOpenDescription}>See more</button>
+                  <button
+                    className="styled-button"
+                    onClick={handleOpenDescription}
+                  >
+                    Full description
+                  </button>
                 </p>
                 <p style={{ marginTop: "1rem" }}>
-                  Genres:{" "}
+                  <b>Genres:</b>{" "}
                   {genres
                     ? genres.map((genre) => {
                         return <span>{allGenres[genre]} </span>;
@@ -129,21 +146,26 @@ const Preview = (props) => {
                     : None}
                 </p>
                 <p style={{ marginTop: "1rem" }}>
-                  Published: {new Date(published).toLocaleDateString()}
+                  <b>Published:</b> {new Date(published).toLocaleDateString()}
                 </p>
-                <p style={{ marginTop: "1rem" }}>Pages: {pages}</p>
+                <p style={{ marginTop: "1rem" }}>
+                  <b>Pages:</b> {pages}
+                </p>
               </Typography>
             </div>
           </Typography>
         </Box>
       </div>
-      <FullDescription description={description} bookTitle={title} author={author}/>
+      <FullDescription
+        description={description}
+        bookTitle={title}
+        author={author}
+      />
     </>
   );
 };
 
 const HomePage = () => {
-  // books.map((book) => console.log(book));
   const [selectedBook, setSelectedBook] = useState(null);
   const [openBook, setOpenBook] = useState(false);
 
