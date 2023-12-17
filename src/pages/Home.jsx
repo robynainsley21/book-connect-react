@@ -63,7 +63,7 @@ const Preview = (props) => {
                   <p>{description}</p>
                 </DialogContentText>
               </DialogContent>
-              <DialogActions>
+              <DialogActions style={{display: 'flex', justifyContent: 'center'}}>
                 <Button onClick={handleCloseDescription}>Close</Button>
               </DialogActions>
             </Dialog>
