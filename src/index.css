@@ -95,6 +95,13 @@ body{
   justify-content: center;
 }
 
+.preview-description{
+  margin-top: 1rem ;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media screen and (min-width: 50rem) {
   .books-container{
     grid-template-columns: repeat(2, 1fr);
