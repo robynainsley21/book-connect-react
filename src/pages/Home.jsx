@@ -2,6 +2,7 @@ import React from "react";
 import { BOOKS_PER_PAGE, authors, genres, books } from "../data/data.jsx";
 import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import Navbar from "../components/navbar";
 
 // MUI COMPONENTS
 import Backdrop from "@mui/material/Backdrop";
@@ -38,7 +39,6 @@ const Preview = (props) => {
   //controlling the description overlay
   const [openFullDescription, setOpenFullDescription] = useState(false);
   const handleOpenDescription = () => {
-    console.log("i was clicked");
     setOpenFullDescription(true);
   };
   const handleCloseDescription = () => setOpenFullDescription(false);
@@ -169,20 +169,21 @@ const HomePage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [openBook, setOpenBook] = useState(false);
 
+  const practiceString = 'practice string'
+
   const closePreview = () => {
     setOpenBook(false);
     setSelectedBook(null);
   };
 
   const extractedBooks = books.slice(0, 20);
-  const eachBook = extractedBooks.map((book, index) => {
+  const eachBook = extractedBooks.map((book) => {
     if (!book) return null;
     const { id, author, title, image } = book;
 
     const openPreview = () => {
       setSelectedBook(book);
       setOpenBook(true);
-      console.log(book);
     };
 
     return (
@@ -207,6 +208,10 @@ const HomePage = () => {
 
   return (
     <>
+    <Navbar func={practiceString} 
+      allBooks={books}  
+      allAuthors={allAuthors}  
+    />
       <div className="homePage">
         {eachBook ? (
           <div className="books-container" key={eachBook.id}>
