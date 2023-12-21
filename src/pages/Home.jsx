@@ -117,7 +117,7 @@ const Preview = (props) => {
               <img style={{ width: "7rem" }} src={image} alt="preview-image" />
             </div>
             <p style={{ textAlign: "center" }}>
-              {author ? allAuthors[author] : Author}
+              {author ? allAuthors[author] : 'Author'}
             </p>
             <div className="preview-description">
               <Typography
@@ -208,11 +208,12 @@ const HomePage = () => {
 
   return (
     <>
-    <Navbar func={practiceString} 
+    <Navbar 
       allBooks={books}  
       allAuthors={allAuthors}  
     />
       <div className="homePage">
+        <h1 style={{textAlign: 'center', margin: '1rem'}}>All Books</h1>
         {eachBook ? (
           <div className="books-container" key={eachBook.id}>
             {eachBook}

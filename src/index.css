@@ -3,6 +3,7 @@
   --color-dark-compliment: #444140;
   --color-light-main: #81B29A;
   --color-light-compliment: #F4F1DE;
+  --color-searched-books: #C9DBBA ;
 }
 
 *{
@@ -55,6 +56,26 @@ body{
   font-size: 1.7rem;
   font-weight: bold;
   color: var(--color-light-compliment);
+}
+
+/* search results */
+.search-container{
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  padding: 5px;
+}
+
+.searched-book-button{
+  background-color: var(--color-searched-books);
+  /* opacity: 0.7; */
+  /* backdrop-filter: blur(8px); */
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 /* HOME PAGE */

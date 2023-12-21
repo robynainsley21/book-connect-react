@@ -1,11 +1,20 @@
+import React from "react";
 import HomePage from "../pages/Home";
 import { useState } from "react";
-import { books, authors } from "../data/data";
+import { books, authors, genres } from "../data/data";
 import ReactDOM from "react-dom";
 
 //MUI components
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+const allGenres = genres;
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -49,17 +58,167 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const SearchedBooksLayout = (props) => {
+  const {
+    bookId,
+    bookTitle,
+    bookAuthor,
+    bookImg,
+    bookGenres,
+    bookPages,
+    bookDescription,
+  } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const SearchedBookPreview = () => {
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    //setting the maximum length for the description
+    const maxDescriptionLength = 200;
+
+    //controlling the description overlay
+    const [openFullDescription, setOpenFullDescription] = useState(false);
+    const handleOpenDescription = () => {
+      setOpenFullDescription(true);
+    };
+    const handleCloseDescription = () => setOpenFullDescription(false);
+
+    //shorten the length of the description text
+    const truncateText = (text, maxLength) => {
+      if (text.length <= maxLength) {
+        return text;
+      } else {
+        return text.slice(0, maxLength) + "...";
+      }
+    };
+
+    const FullDescription = (props) => {
+      const { description, bookTitle, author } = props;
+      return (
+        <div >
+          <p>
+            <React.Fragment>
+              <Dialog
+                open={openFullDescription}
+                onClose={handleCloseDescription}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {bookTitle} by {authors[author]}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    <p>{description}</p>
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Button
+                    style={{ backgroundColor: "#81B29A", color: "inherit" }}
+                    onClick={handleCloseDescription}
+                  >
+                    Close
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </React.Fragment>
+          </p>
+        </div>
+      );
+    };
+
+    return (
+      <>
+      <React.Fragment>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {bookTitle} by {authors[bookAuthor]}
+          </DialogTitle>
+
+          <DialogContent>
+            <img
+              style={{ width: "5rem", height: "auto" }}
+              src={bookImg}
+              alt="book-image"
+            />
+
+            <p>
+              <b>Description:</b>{" "}
+              {bookDescription
+                ? truncateText(bookDescription, maxDescriptionLength)
+                : "No description available"}{" "}
+              <button className="styled-button" onClick={handleOpenDescription}>
+                Full description
+              </button>
+            </p>
+            <p>
+              <b>Genres:</b>{" "}
+              {bookGenres
+                ? bookGenres.map((genre) => {
+                    return <span>{allGenres[genre]} </span>;
+                  })
+                : ""}{" "}
+            </p>
+
+            <p>
+              <b>Pages: </b> {bookPages}
+            </p>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Close</Button>
+          </DialogActions>
+        </Dialog>
+
+      </React.Fragment>
+      <FullDescription
+          bookTitle={bookTitle}
+          author={bookAuthor}
+        />
+      </>
+    );
+  };
+
+  return (
+    <>
+      <button
+        onClick={handleClickOpen}
+        className="searched-book-button"
+        key={bookId}
+      >
+        <div>
+          <img
+            className="book-image"
+            style={{ width: "5rem" }}
+            src={bookImg}
+            alt="book-image"
+          />
+        </div>
+        <div className="author-and-title">
+          <p style={{ fontWeight: "bold" }}>{bookTitle}</p>
+          <p>By {authors[bookAuthor]}</p>
+        </div>
+      </button>
+      <SearchedBookPreview />
+    </>
+  );
+};
+
 const Navbar = (props) => {
   const { allBooks, allAuthors } = props;
   const [searchResults, setSearchResults] = useState([]);
-
-  // const selectedBook = (id, title) => {
-  //   return (
-  //     <div key={id}>
-  //       <p>Title: {title}</p>
-  //     </div>
-  //   )
-  // }
 
   const bookSearched = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -101,18 +260,27 @@ const Navbar = (props) => {
           </div>
         </div>
       </nav>
-      {
-        ReactDOM.createPortal(
-          searchResults &&
-          <div>
+
+      {searchResults.length > 0 && (
+        <div>
+          <h1 style={{ textAlign: "center", padding: "1rem" }}>
+            Searched Books
+          </h1>
+          <div className="search-container">
             {searchResults.map((book) => (
-              <div key={book.id}>
-                <p>Title: {book.title}</p>
-              </div>
+              <SearchedBooksLayout
+                bookId={book.id}
+                bookTitle={book.title}
+                bookImg={book.image}
+                bookAuthor={book.author}
+                bookDescription={book.description}
+                bookPages={book.pages}
+                bookGenres={book.genres}
+              />
             ))}
-          </div>,
-          document.body
-        )}
+          </div>
+        </div>
+      )}
     </>
   );
 };
